@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="KernelBESA">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/KernelBESA.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/LocalBESA.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/RemoteBESA.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
