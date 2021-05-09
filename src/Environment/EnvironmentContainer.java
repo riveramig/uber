@@ -3,18 +3,16 @@ package Environment;
 import BESA.ExceptionBESA;
 import BESA.Kernel.Agent.Event.EventBESA;
 import BESA.Kernel.Agent.KernellAgentExceptionBESA;
+import BESA.Kernel.Agent.PeriodicGuardBESA;
 import BESA.Kernel.Agent.StructBESA;
 import BESA.Kernel.System.AdmBESA;
 import BESA.Kernel.System.Directory.AgHandlerBESA;
 import BESA.Log.ReportBESA;
-import BenchmarkTools.*;
+import BESA.Util.PeriodicDataBESA;
 import ContainersLauncher.BenchmarkConfig;
-import FibonacciAgent.FibonacciAgentGuard;
 import Graph.GraphWeighted;
 import Graph.NodeWeighted;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class EnvironmentContainer {
 
@@ -26,24 +24,36 @@ public class EnvironmentContainer {
         EnvironmentState environmentState = new EnvironmentState(createGraph());
         StructBESA StructSender = new StructBESA();
         StructSender.bindGuard(EnvironmentGuard.class);
+        StructSender.bindGuard(EnvironmentPeriodicGuard.class);
         EnvironmentAgent environmentAgent = new EnvironmentAgent("environment", environmentState, StructSender, 0.91);
         environmentAgent.start();
         adminBesa.registerAgent(environmentAgent, "EnvironmentAgent", "EnvironmentAgent");
 
-        /*AgHandlerBESA ah;
+        /**
+         *
+         *
+         * Generar logica de autos
+         *
+         *
+         */
+
+
+
+
+
+
+
+
+        // ---> fin logica carros
         try {
-            ah = adminBesa.getHandlerByAlias("BenchmarkAgent");
-            EventBESA msj = new EventBESA(
-                    BenchmarkAgentSenderGuard.class.getName(),
-                    new BenchmarkAgentMessage(
-                            config.getNumberOfContainers(),
-                            config.getNumberOfAgentsPerContainer()
-                    )
-            );
-            ah.sendEvent(msj);
-        } catch (ExceptionBESA ex) {
-            Logger.getLogger(FibonacciAgentGuard.class.getName()).log(Level.SEVERE, null, ex);
-        } */
+            AgHandlerBESA ah = adminBesa.getHandlerByAlias("environment");
+            PeriodicDataBESA periodicData = new PeriodicDataBESA(1000, PeriodicGuardBESA.START_PERIODIC_CALL);
+            EventBESA eventPeriodic = new EventBESA(EnvironmentPeriodicGuard.class.getName(),periodicData);
+            ah.sendEvent(eventPeriodic);
+        } catch (ExceptionBESA exceptionBESA) {
+            exceptionBESA.printStackTrace();
+        }
+
     }
 
     public static synchronized GraphWeighted createGraph() {

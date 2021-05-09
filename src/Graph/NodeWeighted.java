@@ -1,22 +1,26 @@
 package Graph;
 
+import User.UserAgent;
+import User.VehicleAgent;
+
 import java.util.LinkedList;
 
 public class NodeWeighted {
     // The int n and String name are just arbitrary attributes
     // we've chosen for our nodes these attributes can of course
     // be whatever you need
-    String name;
+    public String name;
     private boolean visited;
     LinkedList<EdgeWeighted> edges;
-    LinkedList<String> vehiclesInNode;
-    LinkedList<String> usersInNode;
+    public LinkedList<VehicleAgent> vehiclesInNode;
+    public LinkedList<UserAgent> usersInNode;
 
     public NodeWeighted(String name) {
         this.name = name;
         visited = false;
         edges = new LinkedList<>();
         vehiclesInNode = new LinkedList<>();
+        usersInNode = new LinkedList<>();
     }
 
     boolean isVisited() {
@@ -31,7 +35,7 @@ public class NodeWeighted {
         visited = false;
     }
 
-    void addVehicleInNode(String vId) {
+    void addVehicleInNode(VehicleAgent vId) {
         this.vehiclesInNode.add(vId);
     }
 
@@ -39,11 +43,13 @@ public class NodeWeighted {
         this.vehiclesInNode.remove(vId);
     }
 
-    void addUserInNode(String userId) {
+    void addUserInNode(UserAgent userId) {
         this.usersInNode.add(userId);
     }
 
     void removeUserInNode(String userId) {
         this.usersInNode.remove(userId);
     }
+
+
 }

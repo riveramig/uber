@@ -1,5 +1,9 @@
 package Graph;
 
+import BESA.Log.ReportBESA;
+import User.UserAgent;
+import User.VehicleAgent;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -22,19 +26,33 @@ public class GraphWeighted {
         nodes.addAll(Arrays.asList(n));
     }
 
+    public List<NodeWeighted> getAllGraphNodes(){
+        List<NodeWeighted> nodesList = new ArrayList<>();
+        nodesList.addAll(nodes);
+        return nodesList;
+    }
+
+    public void AddUserToNode(String nodeAlias, UserAgent userAgent){
+        NodeWeighted node = this.getNodeByAlias(nodeAlias);
+        if(node == null){
+            ReportBESA.info("Node "+nodeAlias+" not found");return;
+        }
+        node.addUserInNode(userAgent);
+    }
+
     public String whereIsUser(String alias) {
         Iterator<NodeWeighted> it = this.nodes.iterator();
         while(it.hasNext()){
             NodeWeighted node = it.next();
-            String found = node.usersInNode.stream().filter(userAlias -> userAlias.equals(alias)).findAny().orElse("");
-            if(!found.isEmpty()){
+            UserAgent found = node.usersInNode.stream().filter(user -> user.getAlias().equals(alias)).findAny().orElse(null);
+            if(found!=null){
                 return node.name;
             }
         }
         return "";
     }
 
-    public List<String> carsInNode(String nodeAlias) {
+    public List<VehicleAgent> carsInNode(String nodeAlias) {
         for(Iterator<NodeWeighted> it = nodes.iterator(); it.hasNext();){
             NodeWeighted current = it.next();
             if(current.name.equalsIgnoreCase(nodeAlias)){
@@ -44,7 +62,7 @@ public class GraphWeighted {
         return new ArrayList<>();
     }
 
-    public List<String> UsersInNode(String nodeAlias) {
+    public List<UserAgent> UsersInNode(String nodeAlias) {
         for(Iterator<NodeWeighted> it = nodes.iterator(); it.hasNext();){
             NodeWeighted current = it.next();
             if(current.name.equalsIgnoreCase(nodeAlias)){
@@ -68,8 +86,8 @@ public class GraphWeighted {
         Iterator<NodeWeighted> it = this.nodes.iterator();
         while(it.hasNext()){
             NodeWeighted node = it.next();
-            String found = node.vehiclesInNode.stream().filter(userAlias -> userAlias.equals(alias)).findAny().orElse("");
-            if(!found.isEmpty()){
+            VehicleAgent found = node.vehiclesInNode.stream().filter(vehicle -> vehicle.getAlias().equals(alias)).findAny().orElse(null);
+            if(found != null){
                 return node.name;
             }
         }
