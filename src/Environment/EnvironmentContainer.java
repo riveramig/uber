@@ -34,16 +34,58 @@ public class EnvironmentContainer {
          *
          * Generar logica de autos
          *
-         *
          */
-
-
-
-
-
-
-
-
+        EnvironmentState  envState = (EnvironmentState) this.agent.getState();
+        int buses = (int) (5);
+        int cars = (int) (buses*2);
+        int bikes = (int) (cars*2);
+        List<NodeWeighted> nodes = envState.getGraph().getAllGraphNodes();
+        GraphWeigthed graph = envState.getGraph();
+        //Buses logic
+        while (buses>0) {
+            Random rand = new Random();
+            UUIDb uuidb = UUIDb.randomUUIDb();
+            int intRandom = rand.nextInt(nodes.size());
+            String nodeRandomSelectedAlias = nodes.get(intRandom).name;
+            String uuidAsStringb = uuidb.toString();
+            try{
+                VehicleAgent user = this.generateVehicleAgent(uuidAsStringb);
+                graph.AddBusToNode(nodeRandomSelectedAlias, this.generateVehicleAgent(uuidAsStringb));
+                } catch (ExceptionBESA exceptionBESA) {
+                    exceptionBESA.printStackTrace();
+                }
+                buses--;
+            }
+        //Cars logic
+        while (cars>0) {
+            Random rand = new Random();
+            UUIDc uuidc = UUIDc.randomUUIDc();
+            int intRandom = rand.nextInt(nodes.size());
+            String nodeRandomSelectedAlias = nodes.get(intRandom).name;
+            String uuidAsStringc = uuidc.toString();
+            try{
+                VehicleAgent user = this.generateVehicleAgent(uuidAsStringc);
+                graph.AddCarToNode(nodeRandomSelectedAlias, this.generateVehicleAgent(uuidAsStringc));
+                } catch (ExceptionBESA exceptionBESA) {
+                    exceptionBESA.printStackTrace();
+                }
+                cars--;
+            }
+        //Bikes logic
+        while (bikes>0) {
+            Random rand = new Random();
+            UUIDc uuidbi = UUIDc.randomUUIDbi();
+            int intRandom = rand.nextInt(nodes.size());
+            String nodeRandomSelectedAlias = nodes.get(intRandom).name;
+            String uuidAsStringbi = uuidbi.toString();
+            try{
+                VehicleAgent user = this.generateVehicleAgent(uuidAsStringbi);
+                graph.AddBikeToNode(nodeRandomSelectedAlias, this.generateVehicleAgent(uuidAsStringbi));
+                } catch (ExceptionBESA exceptionBESA) {
+                    exceptionBESA.printStackTrace();
+                }
+                bikes--;
+            }     
         // ---> fin logica carros
         try {
             AgHandlerBESA ah = adminBesa.getHandlerByAlias("environment");
