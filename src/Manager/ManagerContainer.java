@@ -29,6 +29,16 @@ public class ManagerContainer {
         managerAgent.start();
         adminBesa.registerAgent(managerAgent, "ManagerAgent01", "ManagerAgent01");
 
+        try {
+            AgHandlerBESA handler = adminBesa.getHandlerByAlias("ManagerAgent01");
+            EventBESA msj = new EventBESA(
+                    ManagerGuard.class.getName(),
+                    null
+            );
+            handler.sendEvent(msj);
+        } catch (ExceptionBESA ex) {
+            Logger.getLogger(FibonacciAgentGuard.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 }
