@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-
+    <container alias = "MAS_05" password = "0.91" ipaddress= "192.168.68.111">
+        <environment seneventattemps = "10" sendeventtimeout = "1" rmitimeout = "1000" />
+    </container>
+    <container alias = "MAS_ENV" password = "0.91" ipaddress= "192.168.68.118">
+        <environment seneventattemps = "10" sendeventtimeout = "1" rmitimeout = "1000" />
+    </container>
 </config>

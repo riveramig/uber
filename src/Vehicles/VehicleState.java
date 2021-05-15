@@ -9,12 +9,15 @@ public class VehicleState extends StateBESA {
 
     private String initialPlace;
 
+    private boolean isEmpty;
+
     public  VehicleState(){}
    
     public VehicleState(String vehicleId,VehicleType vehicleType, String initialPlace) {
        this.vehicleId = vehicleId;
        this.vehicleType = vehicleType;
        this.initialPlace = initialPlace;
+       this.isEmpty = false;
     }
 
     public String getVehicleId() {
@@ -40,5 +43,14 @@ public class VehicleState extends StateBESA {
     public void setInitialPlace(String initialPlace) {
         this.initialPlace = initialPlace;
     }
+
+    public boolean isEmpty() {
+        return isEmpty;
+    }
+
+    public void setEmpty(boolean empty) {
+        isEmpty = empty;
+    }
+
 }
 

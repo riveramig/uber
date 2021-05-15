@@ -1,17 +1,36 @@
 package Manager;
 
-import BESA.ExceptionBESA;
+
 import BESA.Kernel.Agent.Event.EventBESA;
 import BESA.Kernel.Agent.GuardBESA;
-import BESA.Kernel.System.Directory.AgHandlerBESA;
-import Environment.EnvironmentGuard;
-import Environment.EnvironmentMessage;
-import Environment.EnvironmentMessageType;
 
 public class ManagerGuard extends GuardBESA {
     @Override
     public void funcExecGuard(EventBESA eventBESA) {
-        AgHandlerBESA ah;
+        ManagerMessage message = (ManagerMessage) eventBESA.getData();
+        ManagerState managerState = (ManagerState) this.agent.getState();
+        switch (message.getType()) {
+            case CREATE_TRIP:
+                String from = message.getMetaData().split(" ")[0];
+                String to = message.getMetaData().split(" ")[1];
+                String userId = message.getFrom();
+                String isNeighborMine =
+                        managerState.getNeighborsAssigned().stream().filter(str->str.equals(from)).findAny().orElse("");
+                if(!isNeighborMine.isEmpty()){
+                    System.out.println("found trip!! ("+from+"-"+to+")");
+                    System.out.println("user id-> "+userId);
+                    // preguntar al ambiente los vehiculos asignar uno, que el vehiculo se mueva y se sume el costo del viaje
+                    // en variable 'from' esta el barrio de origen del viaje
+                    // en variable 'to' esta el barrio de destino
+                }
+                break;
+
+        }
+
+
+
+
+        /*AgHandlerBESA ah;
         while(true){
             System.out.println("Enviando mensaje");
             try {
@@ -27,7 +46,7 @@ public class ManagerGuard extends GuardBESA {
             } catch (ExceptionBESA exceptionBESA) {
                 exceptionBESA.printStackTrace();
             }
-        }
+        }*/
 
     }
 }
