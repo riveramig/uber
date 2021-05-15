@@ -2,8 +2,6 @@ package Environment;
 
 public enum EnvironmentMessageType {
     GET_PATH_COST,
-    ADD_USER,
-    ADD_VEHICLE,
     WHERE_IS_USER,
     WHERE_IS_CAR,
     UPDATE_CAR_POSITION,
