@@ -1,4 +1,4 @@
-package User;
+package Vehicles;
 
 import BESA.Kernel.Agent.AgentBESA;
 import BESA.Kernel.Agent.KernellAgentExceptionBESA;

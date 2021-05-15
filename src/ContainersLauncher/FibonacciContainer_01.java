@@ -6,12 +6,16 @@
 package ContainersLauncher;
 
 import BESA.ExceptionBESA;
+import BESA.Kernel.Agent.Event.EventBESA;
 import BESA.Kernel.Agent.StructBESA;
 import BESA.Kernel.System.AdmBESA;
+import BESA.Kernel.System.Directory.AgHandlerBESA;
 import BESA.Log.ReportBESA;
 import FibonacciAgent.FibonacciAgent;
 import FibonacciAgent.FibonacciAgentGuard;
 import FibonacciAgent.FibonacciAgentState;
+import Manager.ManagerGuard;
+
 import java.util.ArrayList;
 
 /**
@@ -36,6 +40,13 @@ public class FibonacciContainer_01 {
             FibonacciAgentState estado = new FibonacciAgentState();
             StructBESA Struct = new StructBESA();
             Struct.bindGuard(FibonacciAgentGuard.class);
+
+            AgHandlerBESA handler = adminBesa.getHandlerByAlias("ManagerAgent01");
+            EventBESA msj = new EventBESA(
+                    ManagerGuard.class.getName(),
+                    null
+            );
+            handler.sendEvent(msj);
 
             for (int i = 0; i < config.getNumberOfAgentsPerContainer(); i++) {
                 Agents.add(

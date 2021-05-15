@@ -25,7 +25,10 @@ public class EnvironmentGuard extends GuardBESA {
                 double cost = currentGraph.DijkstraShortestPath(nodeFrom,nodeTo);
                 // logic to send message of cost to car
                 break;
-
+            case HELLO:
+                System.out.println("Mensaje de: "+message.getAliasSender());
+                System.out.println("Mensaje recibido: "+message.getMetaData());
+                break;
 
         }
 

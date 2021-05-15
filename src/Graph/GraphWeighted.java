@@ -2,10 +2,9 @@ package Graph;
 
 import BESA.Log.ReportBESA;
 import User.UserAgent;
-import User.VehicleAgent;
+import Vehicles.VehicleAgent;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class GraphWeighted {
 
@@ -38,6 +37,14 @@ public class GraphWeighted {
             ReportBESA.info("Node "+nodeAlias+" not found");return;
         }
         node.addUserInNode(userAgent);
+    }
+
+    public void addVehicleToNode(String nodeAlias, VehicleAgent vehicleAgent){
+        NodeWeighted node = this.getNodeByAlias(nodeAlias);
+        if(node == null){
+            ReportBESA.info("Node "+nodeAlias+" not found");return;
+        }
+        node.addVehicleInNode(vehicleAgent);
     }
 
     public String whereIsUser(String alias) {

@@ -10,6 +10,8 @@ import Graph.NodeWeighted;
 import User.UserAgent;
 import User.UserGuard;
 import User.UserState;
+import Vehicles.VehicleAgent;
+import Vehicles.VehicleState;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +35,8 @@ public class EnvironmentPeriodicGuard extends PeriodicGuardBESA {
             String uuidAsString = uuid.toString();
             try {
                 UserAgent user = this.generateAgentUser(uuidAsString);
+                user.start();
+                this.getAgent().getAdmLocal().registerAgent(user,uuidAsString,uuidAsString);
                 graph.AddUserToNode(nodeRandomSelectedAlias,this.generateAgentUser(uuidAsString));
                 //Logica usuario pedir servicio
             } catch (ExceptionBESA exceptionBESA) {
@@ -40,17 +44,21 @@ public class EnvironmentPeriodicGuard extends PeriodicGuardBESA {
             }
             passengers--;
         }
-        for(NodeWeighted node: nodes) {
+        /*for(NodeWeighted node: nodes) {
             System.out.println("users in Node: "+node.name+" -> "+node.usersInNode.size());
+            System.out.println("vehicles in node: ");
+            for(VehicleAgent v: node.vehiclesInNode) {
+                System.out.println("vehicle type "+((VehicleState)v.getState()).getVehicleType());
+            }
             System.out.println("----------------------------------------------------------------------");
-        }
+        }*/
     }
 
     private UserAgent generateAgentUser(String alias) throws ExceptionBESA {
         UserState userState = new UserState();
         StructBESA structBESA = new StructBESA();
         structBESA.bindGuard(UserGuard.class);
-        AgHandlerBESA ah = this.getAgent().getAdmLocal().getHandlerByAlias("environment");
+        AgHandlerBESA ah = this.getAgent().getAdmLocal().getHandlerByAlias("EnvironmentAgent");
         return new UserAgent(alias,userState,structBESA,0.91);
     }
 }

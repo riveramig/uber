@@ -1,7 +1,7 @@
 package Graph;
 
 import User.UserAgent;
-import User.VehicleAgent;
+import Vehicles.VehicleAgent;
 
 import java.util.LinkedList;
 

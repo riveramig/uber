@@ -1,4 +1,4 @@
-package User;
+package Vehicles;
 
 import BESA.Kernel.Agent.Event.EventBESA;
 import BESA.Kernel.Agent.GuardBESA;
