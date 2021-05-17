@@ -11,6 +11,8 @@ public class EnvironmentMessage extends DataBESA {
 
     private String metaData;
     private String aliasSender;
+    private String neighbors;
+    private String userId;
 
     public EnvironmentMessage(EnvironmentMessageType type) {
         this.type = type;
@@ -32,6 +34,14 @@ public class EnvironmentMessage extends DataBESA {
         this.from = from;
     }
 
+    public String getNeighbors() {
+        return neighbors;
+    }
+
+    public void setNeighbors(String neighbors) {
+        this.neighbors = neighbors;
+    }
+
     public String getTo() {
         return to;
     }
@@ -50,6 +60,14 @@ public class EnvironmentMessage extends DataBESA {
 
     public String getAliasSender() {
         return aliasSender;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public void setAliasSender(String aliasSender) {

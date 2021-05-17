@@ -1,13 +1,16 @@
 package Vehicles;
 
 import BESA.Kernel.Agent.StateBESA;
+import Graph.GraphWeighted;
 
 public class VehicleState extends StateBESA {
     private String vehicleId;
 
     private VehicleType vehicleType;
 
-    private String initialPlace;
+    private String currentNodeLocation;
+
+    private GraphWeighted graph;
 
     private boolean isEmpty;
 
@@ -16,7 +19,7 @@ public class VehicleState extends StateBESA {
     public VehicleState(String vehicleId,VehicleType vehicleType, String initialPlace) {
        this.vehicleId = vehicleId;
        this.vehicleType = vehicleType;
-       this.initialPlace = initialPlace;
+       this.currentNodeLocation = initialPlace;
        this.isEmpty = false;
     }
 
@@ -36,12 +39,12 @@ public class VehicleState extends StateBESA {
         this.vehicleType = vehicleType;
     }
 
-    public String getInitialPlace() {
-        return initialPlace;
+    public String getCurrentNodeLocation() {
+        return currentNodeLocation;
     }
 
-    public void setInitialPlace(String initialPlace) {
-        this.initialPlace = initialPlace;
+    public void setCurrentNodeLocation(String currentNodeLocation) {
+        this.currentNodeLocation = currentNodeLocation;
     }
 
     public boolean isEmpty() {
@@ -52,5 +55,12 @@ public class VehicleState extends StateBESA {
         isEmpty = empty;
     }
 
+    public GraphWeighted getGraph() {
+        return graph;
+    }
+
+    public void setGraph(GraphWeighted environ) {
+        this.graph = environ;
+    }
 }
 

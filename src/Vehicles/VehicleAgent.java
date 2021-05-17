@@ -4,6 +4,8 @@ import BESA.Kernel.Agent.AgentBESA;
 import BESA.Kernel.Agent.KernellAgentExceptionBESA;
 import BESA.Kernel.Agent.StateBESA;
 import BESA.Kernel.Agent.StructBESA;
+import Environment.EnvironmentState;
+import Graph.GraphWeighted;
 
 public class VehicleAgent extends AgentBESA {
     public VehicleAgent(String alias, StateBESA state, StructBESA structAgent, double passwd) throws KernellAgentExceptionBESA {
@@ -12,7 +14,6 @@ public class VehicleAgent extends AgentBESA {
 
     @Override
     public void setupAgent() {
-
     }
 
     @Override

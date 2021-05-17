@@ -41,12 +41,6 @@ public class FibonacciContainer_01 {
             StructBESA Struct = new StructBESA();
             Struct.bindGuard(FibonacciAgentGuard.class);
 
-            AgHandlerBESA handler = adminBesa.getHandlerByAlias("ManagerAgent01");
-            EventBESA msj = new EventBESA(
-                    ManagerGuard.class.getName(),
-                    null
-            );
-            handler.sendEvent(msj);
 
             for (int i = 0; i < config.getNumberOfAgentsPerContainer(); i++) {
                 Agents.add(

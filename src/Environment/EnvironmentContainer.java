@@ -9,7 +9,6 @@ import BESA.Kernel.System.AdmBESA;
 import BESA.Kernel.System.Directory.AgHandlerBESA;
 import BESA.Log.ReportBESA;
 import BESA.Util.PeriodicDataBESA;
-import ContainersLauncher.BenchmarkConfig;
 import Graph.GraphWeighted;
 import Graph.NodeWeighted;
 import Vehicles.VehicleAgent;
@@ -56,7 +55,7 @@ public class EnvironmentContainer {
             String nodeRandomSelectedAlias = nodes.get(intRandom).name;
             String uuidAsStringb = uuidb.toString();
             try{
-                VehicleAgent vehicle = generateVehicleAgent(uuidAsStringb, VehicleType.BUS);
+                VehicleAgent vehicle = generateVehicleAgent(uuidAsStringb, VehicleType.BUS,nodeRandomSelectedAlias, createGraph());
                 vehicle.start();
                 adminBesa.registerAgent(vehicle,uuidAsStringb,uuidAsStringb);
                 graph.addVehicleToNode(nodeRandomSelectedAlias,vehicle);
@@ -73,7 +72,7 @@ public class EnvironmentContainer {
             String nodeRandomSelectedAlias = nodes.get(intRandom).name;
             String uuidAsStringc = uuidc.toString();
             try{
-                VehicleAgent vehicle = generateVehicleAgent(uuidAsStringc, VehicleType.CAR);
+                VehicleAgent vehicle = generateVehicleAgent(uuidAsStringc, VehicleType.CAR,nodeRandomSelectedAlias, createGraph());
                 vehicle.start();
                 adminBesa.registerAgent(vehicle,uuidAsStringc,uuidAsStringc);
                 graph.addVehicleToNode(nodeRandomSelectedAlias,vehicle);
@@ -90,7 +89,7 @@ public class EnvironmentContainer {
             String nodeRandomSelectedAlias = nodes.get(intRandom).name;
             String uuidAsStringbi = uuidbi.toString();
             try{
-                VehicleAgent vehicle = generateVehicleAgent(uuidAsStringbi, VehicleType.BIKE);
+                VehicleAgent vehicle = generateVehicleAgent(uuidAsStringbi, VehicleType.BIKE,nodeRandomSelectedAlias, createGraph());
                 vehicle.start();
                 adminBesa.registerAgent(vehicle,uuidAsStringbi,uuidAsStringbi);
                 graph.addVehicleToNode(nodeRandomSelectedAlias,vehicle);
@@ -111,9 +110,11 @@ public class EnvironmentContainer {
 
     }
 
-    private static VehicleAgent generateVehicleAgent(String uuidAsString, VehicleType vehicleType) throws KernellAgentExceptionBESA {
+    private static VehicleAgent generateVehicleAgent(String uuidAsString, VehicleType vehicleType, String initNode, GraphWeighted graphWeighted) throws KernellAgentExceptionBESA {
         VehicleState vehicleState = new VehicleState();
         vehicleState.setVehicleType(vehicleType);
+        vehicleState.setCurrentNodeLocation(initNode);
+        vehicleState.setGraph(graphWeighted);
         StructBESA structBESA = new StructBESA();
         structBESA.bindGuard(VehicleGuard.class);
         return new VehicleAgent(uuidAsString,vehicleState,structBESA,0.91);
@@ -162,9 +163,6 @@ public class EnvironmentContainer {
 
         graphWeighted.addEdge(teusaquillo,centro,2);
         graphWeighted.addEdge(centro,teusaquillo,2);
-
-
-        System.out.println("shortest path: "+graphWeighted.DijkstraShortestPath(suba,centro));
 
         return graphWeighted;
     }
