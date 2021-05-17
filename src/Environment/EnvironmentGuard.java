@@ -12,6 +12,10 @@ import User.UserGuard;
 import User.UserMessage;
 import Vehicles.*;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.Random;
 
 public class EnvironmentGuard extends GuardBESA {
@@ -57,7 +61,9 @@ public class EnvironmentGuard extends GuardBESA {
                 for (int i = 0; i < neighborsToBroadcast.length; i++) {
                     String neighbor = neighborsToBroadcast[i];
                     NodeWeighted currentNeighbor = currentGraph.getNodeByAlias(neighbor);
-                    for (VehicleAgent vAgent: currentNeighbor.vehiclesInNode) {
+                    Iterator<VehicleAgent> allVehiclesIt = currentNeighbor.vehiclesInNode.values().iterator();
+                    while (allVehiclesIt.hasNext()) {
+                        VehicleAgent vAgent = allVehiclesIt.next();
                         try{
                             AgHandlerBESA ah = this.agent.getAdmLocal().getHandlerByAlias(vAgent.getAlias());
                             VehicleMessage vMessage = new VehicleMessage(VehicleMessageType.TRIP_REQUEST);
@@ -71,6 +77,23 @@ public class EnvironmentGuard extends GuardBESA {
                             e.printStackTrace();
                         }
                     }
+                }
+                break;
+            case FINISH_CAR_TRIP:
+                String filename = "E:\\trips.csv";
+                String vehicleId = message.getAliasSender();
+                String fromNode = message.getFrom();
+                String toNode = message.getTo();
+                String userId = message.getUserId();
+                String costTrip = message.getMetaData();
+                currentGraph.updateVehiclePosition(fromNode,toNode,vehicleId);
+                currentGraph.removeUserTripFinish(fromNode,userId);
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(filename,true));
+                    writer.append(fromNode+"|"+toNode+"|"+vehicleId+"|"+userId+"|"+costTrip+"|"+System.currentTimeMillis()+"\n");
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 break;
         }

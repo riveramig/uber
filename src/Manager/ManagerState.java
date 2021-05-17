@@ -13,6 +13,7 @@ public class ManagerState extends StateBESA {
 
     public ManagerState(){
         this.neighborsAssigned =  new ArrayList<>();
+        this.allTripsManager = new Hashtable<>();
     }
 
     public void addNeighbor(String neighbor) {

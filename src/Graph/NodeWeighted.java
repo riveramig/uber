@@ -3,7 +3,9 @@ package Graph;
 import User.UserAgent;
 import Vehicles.VehicleAgent;
 
+import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class NodeWeighted {
     // The int n and String name are just arbitrary attributes
@@ -12,15 +14,15 @@ public class NodeWeighted {
     public String name;
     private boolean visited;
     LinkedList<EdgeWeighted> edges;
-    public LinkedList<VehicleAgent> vehiclesInNode;
-    public LinkedList<UserAgent> usersInNode;
+    public ConcurrentHashMap<String, VehicleAgent> vehiclesInNode;
+    public ConcurrentHashMap<String, UserAgent> usersInNode;
 
     public NodeWeighted(String name) {
         this.name = name;
         visited = false;
         edges = new LinkedList<>();
-        vehiclesInNode = new LinkedList<>();
-        usersInNode = new LinkedList<>();
+        vehiclesInNode = new ConcurrentHashMap<>();
+        usersInNode = new ConcurrentHashMap<>();
     }
 
     boolean isVisited() {
@@ -35,20 +37,20 @@ public class NodeWeighted {
         visited = false;
     }
 
-    void addVehicleInNode(VehicleAgent vId) {
-        this.vehiclesInNode.add(vId);
+    void addVehicleInNode(String alias, VehicleAgent vId) {
+        this.vehiclesInNode.put(alias, vId);
     }
 
-    void removeVehicleNode(String vId) {
-        this.vehiclesInNode.remove(vId);
+    void removeVehicleNode(String alias) {
+        this.vehiclesInNode.remove(alias);
     }
 
-    void addUserInNode(UserAgent userId) {
-        this.usersInNode.add(userId);
+    void addUserInNode(String alias, UserAgent userId) {
+        this.usersInNode.put(alias,userId);
     }
 
-    void removeUserInNode(String userId) {
-        this.usersInNode.remove(userId);
+    void removeUserInNode(String alias) {
+        this.usersInNode.remove(alias);
     }
 
 

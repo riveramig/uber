@@ -50,10 +50,9 @@ public class EnvironmentContainer {
         //Buses logic
         while (buses>0) {
             Random rand = new Random();
-            UUID uuidb = UUID.randomUUID();
             int intRandom = rand.nextInt(nodes.size());
             String nodeRandomSelectedAlias = nodes.get(intRandom).name;
-            String uuidAsStringb = uuidb.toString();
+            String uuidAsStringb = "BUS_"+buses;
             try{
                 VehicleAgent vehicle = generateVehicleAgent(uuidAsStringb, VehicleType.BUS,nodeRandomSelectedAlias, createGraph());
                 vehicle.start();
@@ -67,10 +66,9 @@ public class EnvironmentContainer {
         //Cars logic
         while (cars>0) {
             Random rand = new Random();
-            UUID uuidc = UUID.randomUUID();
             int intRandom = rand.nextInt(nodes.size());
             String nodeRandomSelectedAlias = nodes.get(intRandom).name;
-            String uuidAsStringc = uuidc.toString();
+            String uuidAsStringc = "VEHICLE_"+cars;
             try{
                 VehicleAgent vehicle = generateVehicleAgent(uuidAsStringc, VehicleType.CAR,nodeRandomSelectedAlias, createGraph());
                 vehicle.start();
@@ -87,7 +85,7 @@ public class EnvironmentContainer {
             UUID uuidbi = UUID.randomUUID();
             int intRandom = rand.nextInt(nodes.size());
             String nodeRandomSelectedAlias = nodes.get(intRandom).name;
-            String uuidAsStringbi = uuidbi.toString();
+            String uuidAsStringbi = "BIKE_"+bikes;
             try{
                 VehicleAgent vehicle = generateVehicleAgent(uuidAsStringbi, VehicleType.BIKE,nodeRandomSelectedAlias, createGraph());
                 vehicle.start();

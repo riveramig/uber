@@ -80,13 +80,14 @@ public class ManagerGuard extends GuardBESA {
                                 System.out.println("All offers for user "+message.getUserId()+": "+allOffers.size());
                                 Offer lesCostOffer = allOffers.stream().min(Comparator.comparing(Offer::getCost)).orElse(null);
                                 if(lesCostOffer != null){
-                                    System.out.println("less offer found!!! "+lesCostOffer.getUserId());
+                                    System.out.println("less offer found!!! "+lesCostOffer.getUserId()+" cost: "+lesCostOffer.getCost());
                                     AgHandlerBESA ah = currentAgent.getAdmLocal().getHandlerByAlias(lesCostOffer.getVehicleId());
                                     VehicleMessage vehicleMessage = new VehicleMessage(VehicleMessageType.TRIP_ACCEPTED);
                                     vehicleMessage.setManagerId(currentAgent.getAlias());
                                     vehicleMessage.setFrom(lesCostOffer.getFrom());
                                     vehicleMessage.setTo(lesCostOffer.getTo());
                                     vehicleMessage.setUserId(lesCostOffer.getUserId());
+                                    vehicleMessage.setCost(lesCostOffer.getCost());
                                     EventBESA ev = new EventBESA(VehicleGuard.class.getName(),vehicleMessage);
                                     ah.sendEvent(ev);
                                     allTrips.remove(message.getUserId());
@@ -98,6 +99,7 @@ public class ManagerGuard extends GuardBESA {
                             }
                         }
                     },500, TimeUnit.MILLISECONDS);
+                    exec.shutdown();
                 }else {
                     offersPerTrip.add(offer);
                 }

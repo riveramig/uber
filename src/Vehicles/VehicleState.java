@@ -12,7 +12,7 @@ public class VehicleState extends StateBESA {
 
     private GraphWeighted graph;
 
-    private boolean isEmpty;
+    private boolean lockVehicle;
 
     public  VehicleState(){}
    
@@ -20,7 +20,7 @@ public class VehicleState extends StateBESA {
        this.vehicleId = vehicleId;
        this.vehicleType = vehicleType;
        this.currentNodeLocation = initialPlace;
-       this.isEmpty = false;
+       this.lockVehicle = false;
     }
 
     public String getVehicleId() {
@@ -47,12 +47,12 @@ public class VehicleState extends StateBESA {
         this.currentNodeLocation = currentNodeLocation;
     }
 
-    public boolean isEmpty() {
-        return isEmpty;
+    public boolean isLockVehicle() {
+        return lockVehicle;
     }
 
-    public void setEmpty(boolean empty) {
-        isEmpty = empty;
+    public void setLockVehicle(boolean lockVehicle) {
+        this.lockVehicle = lockVehicle;
     }
 
     public GraphWeighted getGraph() {

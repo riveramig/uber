@@ -8,6 +8,7 @@ public class VehicleMessage extends DataBESA {
     private String to;
     private String userId;
     private String managerId;
+    private double cost;
     private VehicleMessageType type;
 
     public VehicleMessage(VehicleMessageType type) {
@@ -52,5 +53,13 @@ public class VehicleMessage extends DataBESA {
 
     public void setType(VehicleMessageType type) {
         this.type = type;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 }

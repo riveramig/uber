@@ -3,6 +3,7 @@ package Graph;
 import BESA.Log.ReportBESA;
 import User.UserAgent;
 import Vehicles.VehicleAgent;
+import Vehicles.VehicleState;
 
 import java.util.*;
 
@@ -36,7 +37,7 @@ public class GraphWeighted {
         if(node == null){
             ReportBESA.info("Node "+nodeAlias+" not found");return;
         }
-        node.addUserInNode(userAgent);
+        node.addUserInNode(userAgent.getAlias(),userAgent);
     }
 
     public void addVehicleToNode(String nodeAlias, VehicleAgent vehicleAgent){
@@ -44,14 +45,39 @@ public class GraphWeighted {
         if(node == null){
             ReportBESA.info("Node "+nodeAlias+" not found");return;
         }
-        node.addVehicleInNode(vehicleAgent);
+        node.addVehicleInNode(vehicleAgent.getAlias(),vehicleAgent);
+    }
+
+    public synchronized void updateVehiclePosition(String nodeActualPosition, String nodeFinalPosition, String vehicleAlias) {
+        NodeWeighted nodeActual = this.getNodeByAlias(nodeActualPosition);
+        NodeWeighted nodeFinal = this.getNodeByAlias(nodeFinalPosition);
+        VehicleAgent vehicle = nodeActual.vehiclesInNode.get(vehicleAlias);
+        try {
+            nodeFinal.vehiclesInNode.put(vehicleAlias,vehicle);
+            VehicleState vehicleState = (VehicleState) vehicle.getState();
+            //vehicleState.setLockVehicle(false);
+            vehicleState.setCurrentNodeLocation(nodeFinalPosition);
+            nodeActual.vehiclesInNode.remove(vehicleAlias);
+            System.out.println("Vehicle moved");
+        }catch (NullPointerException e) { }
+    }
+
+    public synchronized void removeUserTripFinish(String nodeActualPosition, String userId) {
+        NodeWeighted nodeActual = this.getNodeByAlias(nodeActualPosition);
+        try{
+            UserAgent user = nodeActual.usersInNode.get(userId);
+            user.shutdownAgent();
+            nodeActual.usersInNode.remove(userId);
+            System.out.println("User removed");
+        }catch (NullPointerException e){ }
     }
 
     public String whereIsUser(String alias) {
         Iterator<NodeWeighted> it = this.nodes.iterator();
         while(it.hasNext()){
             NodeWeighted node = it.next();
-            UserAgent found = node.usersInNode.stream().filter(user -> user.getAlias().equals(alias)).findAny().orElse(null);
+            List<UserAgent> users = new ArrayList<>(node.usersInNode.values());
+            UserAgent found = users.stream().filter(user -> user.getAlias().equals(alias)).findAny().orElse(null);
             if(found!=null){
                 return node.name;
             }
@@ -63,7 +89,7 @@ public class GraphWeighted {
         for(Iterator<NodeWeighted> it = nodes.iterator(); it.hasNext();){
             NodeWeighted current = it.next();
             if(current.name.equalsIgnoreCase(nodeAlias)){
-                return current.vehiclesInNode;
+                return new ArrayList<>(current.vehiclesInNode.values());
             }
         }
         return new ArrayList<>();
@@ -73,7 +99,7 @@ public class GraphWeighted {
         for(Iterator<NodeWeighted> it = nodes.iterator(); it.hasNext();){
             NodeWeighted current = it.next();
             if(current.name.equalsIgnoreCase(nodeAlias)){
-                return current.usersInNode;
+                return new ArrayList<>(current.usersInNode.values());
             }
         }
         return new ArrayList<>();
@@ -93,7 +119,8 @@ public class GraphWeighted {
         Iterator<NodeWeighted> it = this.nodes.iterator();
         while(it.hasNext()){
             NodeWeighted node = it.next();
-            VehicleAgent found = node.vehiclesInNode.stream().filter(vehicle -> vehicle.getAlias().equals(alias)).findAny().orElse(null);
+            ArrayList<VehicleAgent>allCars = new ArrayList<>(node.vehiclesInNode.values());
+            VehicleAgent found = allCars.stream().filter(vehicle -> vehicle.getAlias().equals(alias)).findAny().orElse(null);
             if(found != null){
                 return node.name;
             }
@@ -172,6 +199,9 @@ public class GraphWeighted {
         // by keeping track how we arrived at a particular node, we effectively
         // keep a "pointer" to the parent node of each node, and we follow that
         // path to the start
+        if(start == null || end == null){
+            throw new RuntimeException("Start or end node null!");
+        }
         HashMap<NodeWeighted, NodeWeighted> changedAt = new HashMap<>();
         changedAt.put(start, null);
 

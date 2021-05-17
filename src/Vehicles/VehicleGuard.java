@@ -4,8 +4,12 @@ import BESA.ExceptionBESA;
 import BESA.Kernel.Agent.Event.EventBESA;
 import BESA.Kernel.Agent.GuardBESA;
 import BESA.Kernel.System.Directory.AgHandlerBESA;
+import Environment.EnvironmentGuard;
+import Environment.EnvironmentMessage;
+import Environment.EnvironmentMessageType;
 import Graph.GraphWeighted;
 import Graph.NodeWeighted;
+import Manager.ManagerGuard;
 import Manager.ManagerMessage;
 import Manager.ManagerMessageType;
 
@@ -28,14 +32,18 @@ public class VehicleGuard extends GuardBESA {
                     NodeWeighted nodeFrom = graphWeighted.getNodeByAlias(message.getFrom());
                     NodeWeighted nodeTo = graphWeighted.getNodeByAlias(message.getTo());
                     cost = graphWeighted.DijkstraShortestPath(nodeFrom,nodeTo);
+                    graphWeighted.resetNodesVisited();
                 } else {
                     // No estoy en el mismo nodo
                     // primero el costo de ir al nodo donde se encuentra el pasajeiro
                     NodeWeighted nodeFromFirstStretch = graphWeighted.getNodeByAlias(vehicleState.getCurrentNodeLocation());
                     NodeWeighted nodeToFirstStretch = graphWeighted.getNodeByAlias(message.getFrom());
                     NodeWeighted nodeToSecondStretch = graphWeighted.getNodeByAlias(message.getTo());
-                    cost = graphWeighted.DijkstraShortestPath(nodeFromFirstStretch,nodeToFirstStretch) +
-                            graphWeighted.DijkstraShortestPath(nodeToFirstStretch,nodeToSecondStretch);
+                    double partial1 = graphWeighted.DijkstraShortestPath(nodeFromFirstStretch,nodeToFirstStretch);
+                    graphWeighted.resetNodesVisited();
+                    double partial2 = graphWeighted.DijkstraShortestPath(nodeToFirstStretch,nodeToSecondStretch);
+                    graphWeighted.resetNodesVisited();
+                    cost = partial1 + partial2;
                 }
                 try {
                     AgHandlerBESA ah = this.agent.getAdmLocal().getHandlerByAlias(message.getManagerId());
@@ -45,14 +53,26 @@ public class VehicleGuard extends GuardBESA {
                     managerMessage.setFromNode(message.getFrom());
                     managerMessage.setToNode(message.getTo());
                     managerMessage.setCostTrip(cost);
-                    EventBESA ev = new EventBESA(ManagerMessage.class.getName(),managerMessage);
+                    EventBESA ev = new EventBESA(ManagerGuard.class.getName(),managerMessage);
                     ah.sendEvent(ev);
                 } catch (ExceptionBESA e) {
                     e.printStackTrace();
                 }
                 break;
             case TRIP_ACCEPTED:
-                System.out.println("Ya puedo empezar un viaje :D");
+                try {
+                    AgHandlerBESA ah = this.agent.getAdmLocal().getHandlerByAlias("EnvironmentAgent");
+                    EnvironmentMessage envMessage = new EnvironmentMessage(EnvironmentMessageType.FINISH_CAR_TRIP);
+                    envMessage.setAliasSender(this.agent.getAlias());
+                    envMessage.setUserId(message.getUserId());
+                    envMessage.setFrom(message.getFrom());
+                    envMessage.setTo(message.getTo());
+                    envMessage.setMetaData(message.getCost()+"");
+                    EventBESA ev = new EventBESA(EnvironmentGuard.class.getName(),envMessage);
+                    ah.sendEvent(ev);
+                } catch (ExceptionBESA e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }

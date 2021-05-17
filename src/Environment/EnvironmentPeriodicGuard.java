@@ -13,10 +13,10 @@ import User.UserState;
 import Vehicles.VehicleAgent;
 import Vehicles.VehicleState;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 public class EnvironmentPeriodicGuard extends PeriodicGuardBESA {
     @Override
@@ -38,7 +38,7 @@ public class EnvironmentPeriodicGuard extends PeriodicGuardBESA {
                 user.start();
                 this.getAgent().getAdmLocal().registerAgent(user,uuidAsString,uuidAsString);
                 graph.AddUserToNode(nodeRandomSelectedAlias,user);
-                //Logica usuario pedir servicio
+                logToFile(uuidAsString,nodeRandomSelectedAlias,System.currentTimeMillis());
             } catch (ExceptionBESA exceptionBESA) {
                 exceptionBESA.printStackTrace();
             }
@@ -47,10 +47,23 @@ public class EnvironmentPeriodicGuard extends PeriodicGuardBESA {
         for(NodeWeighted node: nodes) {
             System.out.println("users in Node: "+node.name+" -> "+node.usersInNode.size());
             System.out.println("vehicles in node: ");
-            for(VehicleAgent v: node.vehiclesInNode) {
+            Iterator<VehicleAgent> allVehiclesIt = node.vehiclesInNode.values().iterator();
+            while(allVehiclesIt.hasNext()) {
+                VehicleAgent v = allVehiclesIt.next();
                 System.out.println("vehicle type "+((VehicleState)v.getState()).getVehicleType());
             }
             System.out.println("----------------------------------------------------------------------");
+        }
+    }
+
+    private void logToFile(String uuidAsString, String nodeRandomSelectedAlias, long currentTimeMillis) {
+        String filename = "E:\\users.csv";
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename,true));
+            writer.append(uuidAsString+"|"+nodeRandomSelectedAlias+"|"+currentTimeMillis+"\n");
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
